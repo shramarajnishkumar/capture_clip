@@ -1,8 +1,8 @@
 # Python version is 3.10.12
 
 # Create and activate the python environments using the below command
-- python3 -m venv <your env name>
-- source <your env name>/bin/activate
+- python3 -m venv your_env_name
+- source your_env_name/bin/activate
 
 # install requirements file using the below command:-
 - pip install -r requirements.txt
