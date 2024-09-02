@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Login!</title>
+{% endblock title %}
+
+{% block msg %}
+{% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <div class="alert alert-primary" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
+{% endblock msg %}
+
+{% block body %}
+
+<div class="container">
+<div class="card">
+    <h4 class="card-title text-center">Login</h4>
+    <div class="card-body d-flex justify-content-center">
+        <form class="g-3 " style="width: 50%;" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+</div>
+
+
+{% endblock body %}

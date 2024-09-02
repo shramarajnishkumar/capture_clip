@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Home!</title>
+{% endblock title %}
+
+{% block msg %}
+{% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <div class="alert alert-primary" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
+{% endblock msg %}
+
+{% block body %}
+
+<div class="container">
+    <div class="card ">
+    <div class="card-body">
+        <h1 class="card-title text-center">Capture Clip</h1>
+        <form class="row g-3 d-flex justify-content-center text-center" method="post">
+        {% csrf_token %}
+            <div class="col-auto">
+                <input type="url" name="youtube_url" class="form-control" id="inputUrl" placeholder="Enter YouTube Likn Here">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">Play</button>
+            </div>
+        </form>
+
+        {% if video %}
+            <div class="row g-3 d-flex justify-content-center">
+                <video id="myVideo" class="text-center" style="width: 30%;" width="320" height="240" controls autoplay>
+                    <source src="{{ video.download_video.url }}" type="video/mp4"> </source>
+                </video><br>
+                {% comment %} <button type="submit" class="btn btn-primary" data-bs-toggle="modal" role="button">Capture</button> {% endcomment %}
+                <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Capture</a>
+
+                <div  style="width: 40%;">
+                    <div class="d-flex justify-content-center">
+                        <label for="clipLength" class="form-label mx-2" style="width: 40%;">Clip Length</label>
+                        <span id="rangeValue">0</span><span>s</span>
+                        <input type="range" class="form-range mx-1" min="0" max="60" id="clipLength" oninput="updateRangeValue(this.value)" value="0">
+                        <span >60s</span>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="saveAudio" class="form-check-input" id="saveAudio">
+                        <label class="form-check-label" for="saveAudio">Save audio</label>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="emailClip" class="form-check-input" id="emailClip">
+                        <label class="form-check-label" for="emailClip">Email clip</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="emailOption" id="emailOption" value="single_clip">
+                        <label class="form-check-label" for="single_clip">
+                        Single clip
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="emailOption" id="emailOption" value="end_of_the_day_together">
+                        <label class="form-check-label" for="end_of_the_day_together">
+                        End of the day together
+                        </label>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row g-3 d-flex justify-content-center">
+        <div class="col-auto">
+        </div>
+        </div>
+
+    </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="exampleModalTogglePopup" aria-hidden="true" aria-labelledby="exampleModalTogglePopupLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="loading-spinner">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="justify-content:space-around">
+    <div class="modal-content" style="width: 50%;">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text center" id="exampleModalToggleLabel">Labels</h1>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="labels" class="form-check-input" id="inspiration" value="Inspiration">
+            <label class="form-check-label" for="inspiration">Inspiration</label>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="labels" class="form-check-input" id="dataFigures" value="Data Figures">
+            <label class="form-check-label" for="dataFigures">Data Figures</label>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="labels" class="form-check-input" id="productivity" value="Productivity">
+            <label class="form-check-label" for="productivity">Productivity</label>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="labels" class="form-check-input" id="motivation" value="Motivation">
+            <label class="form-check-label" for="motivation">Movivation</label>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="labels" class="form-check-input" id="fitness" value="Fitness">
+            <label class="form-check-label" for="fitness">Fitness</label>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="labels" class="form-check-input" id="lifeHack" value="Life Hack">
+            <label class="form-check-label" for="lifeHack">Life Hack</label>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="labels" class="form-check-input" id="work" value="Work">
+            <label class="form-check-label" for="work">Work</label>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="labels" class="form-check-input" id="personal" value="Personal">
+            <label class="form-check-label" for="personal">Personal</label>
+        </div> 
+      </div>
+      <div class="modal-footer">
+          <button class="btn btn-secondary" class="btn btn-secondary" data-bs-dismiss="modal">Not Now</button>
+          <button class="btn btn-primary" id="sendDataButton" class="btn btn-secondary" data-bs-dismiss="modal">Save</button>
+      </div>
+      <input type="hidden", value="{{video.video_id}}", name="video_id" id="video_id">
+    </div>
+  </div>
+</div>
+
+<script>
+    function updateRangeValue(value) {
+        document.getElementById('rangeValue').textContent = value;
+    }
+    
+    document.addEventListener("DOMContentLoaded", function() {
+        const rangeInput = document.getElementById('clipLength');
+        updateRangeValue(rangeInput.value);
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#sendDataButton').click(function() {
+            const video = document.getElementById('myVideo');
+            const videoCurrentTime = Math.floor(video.currentTime);
+            console.log("videoCurrentTime", videoCurrentTime);
+            
+            const clipLengthValue = document.getElementById('clipLength').value;
+            console.log("clipLengthValue", clipLengthValue);
+            var startTime;
+            if(videoCurrentTime > parseInt(clipLengthValue, 10)){
+                startTime =  parseInt(clipLengthValue, 10) - parseInt(clipLengthValue, 10);
+            }else{
+                startTime = 0;
+            }
+            console.log("startTime", startTime);
+            
+            const endTime =  parseInt(clipLengthValue, 10) + parseInt(clipLengthValue, 10);
+            console.log("endTime", endTime);
+            
+        
+            const saveAudioValue = document.getElementById("saveAudio").value;
+            console.log("saveAudioValue", saveAudioValue);
+            
+            const emailClipValue = document.getElementById("emailClip").value;
+            const emailOptionValue = document.getElementById("emailOption").value;
+            const video_id = document.getElementById("video_id").value;
+            console.log("emailClipValue", emailClipValue);
+            console.log("emailOptionValue", emailOptionValue);
+            
+            let checkboxes = document.querySelectorAll('input[name="labels"]:checked');
+            let selectedValues = [];
+            checkboxes.forEach((checkbox) => {
+                selectedValues.push(checkbox.value);
+            });
+            console.log("selectedValues",selectedValues);
+            const queryString = $.param({
+                start_time: startTime,
+                end_time: endTime,
+                saveAudioValue: saveAudioValue,
+                emailClipValue: emailClipValue,
+                emailOptionValue: emailOptionValue,
+                selectedValues: JSON.stringify(selectedValues),
+                video_id: video_id
+            });
+
+    
+            $.ajax({
+                url: '/capture_clip?'+queryString,
+                type: 'GET',
+                contentType: 'application/json',
+                beforeSend: function() {
+                    $('#exampleModalTogglePopup').modal('show');
+                    // $('#loading-spinner').show();
+                },
+                success: function(response) {
+                    $('#exampleModalTogglePopup').modal('hide');
+                    // $('#loading-spinner').hide();
+                    if (response == "Clip has been Capture!") {
+                        window.location.href = "{% url 'journal' %}";
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#exampleModalTogglePopup').modal('hide');
+                    // $('#loading-spinner').hide();
+                    console.error('Error:', error);
+                    alert(error)
+                }
+            });
+        });
+    });
+</script>
+{% endblock body %}

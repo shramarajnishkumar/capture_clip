@@ -1,0 +1,9 @@
+.env
+db.sqlite3
+media/audio_clip
+media/video_clip
+media/Youtube
+media/youtube_download
+capture_clip/__pycache__
+clip/migrations
+clip/__pycache__

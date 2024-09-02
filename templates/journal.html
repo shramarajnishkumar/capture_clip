@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Home!</title>
+{% endblock title %}
+
+{% block msg %}
+{% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <div class="alert alert-primary" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
+{% endblock msg %}
+
+{% block body %}
+
+<div class="container">
+<h1 class="text-center">Journal</h1>
+{% for clip in capture_clip %}
+    <div class="card mb-3">
+        <div class="card-body">
+          Title : {{clip.video_title}}<br>
+          Clip date : {{clip.clip_date}}<br>
+          Link : <a href="{{clip.youtube_link}}">{{clip.youtube_link}} </a><br>
+          Transcription : {{clip.transcription}}<br>
+          Audio : <a href="{{clip.audio_clip}}">audio clip</a><br>
+          Labels : {{clip.labels}}<br>
+        </div>
+      </div>
+{% endfor %}
+</div>
+
+{% endblock body %}
